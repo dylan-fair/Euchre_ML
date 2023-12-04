@@ -13,18 +13,17 @@ def make_deck():
     return deck 
 
 def is_trump(card, trump):
-    card = card.split(';')
-
-    if card[0] == trump:
+    card_split = card.split(';')
+    if card_split[0] == trump:
         return True
     else:
-        if trump == 'Hearts' and card[0] == 'J' and card[1] == 'Diamonds':
+        if trump == 'Hearts' and card == 'Diamonds;J':
             return True
-        elif trump == 'Diamonds' and card[0] == 'J' and card[1] == 'Hearts':
+        elif trump == 'Diamonds' and card == 'Hearts;J':
             return True
-        elif trump == 'Clubs' and card[0] == 'J' and card[1] == 'Spades':
+        elif trump == 'Clubs' and card == 'Spades;J':
             return True
-        elif trump == 'Spades' and card[0] == 'J' and card[1] == 'Clubs':
+        elif trump == 'Spades' and card == 'Clubs;J':
             return True
         else:
             return False
@@ -67,4 +66,33 @@ def win_trick(hand, trump, pos):
         counter +=1 
     return winning_player, delt_suit
 
-        
+def is_bower(card, trump):
+    if trump == 'Hearts' and card == 'Diamonds;J':
+        return True
+    elif trump == 'Diamonds' and card == 'Hearts;J':
+        return True
+    elif trump == 'Clubs' and card == 'Spades;J':
+        return True
+    elif trump == 'Spades' and card == 'Clubs;J':
+        return True
+    else:
+        return False
+    
+def not_follow_suit_finder(suit_delt, hand, card_played, trump):
+    broke_rules = False
+    if trump == 'Hearts' and card_played == 'Diamonds;J' and suit_delt == 'Hearts':
+        return broke_rules
+    if trump == 'Dimaonds' and card_played == 'Hearts;J' and suit_delt == 'Diamonds':
+        return broke_rules
+    if trump == 'Clubs' and card_played == 'Spades;J' and suit_delt == 'Clubs':
+        return broke_rules
+    if trump == 'Spades' and card_played == 'Clubs;J' and suit_delt == 'Spades':
+        return broke_rules
+
+    if card_played.split(';')[0] == suit_delt:
+        return False
+    for cards in hand:
+        suit = cards.split(';')[0]
+        if suit == suit_delt:
+            broke_rules = True
+    return broke_rules

@@ -1,1 +1,6 @@
 final_training_set.csv
+hands_broken_down.csv
+best_hand_orders.csv
+card_replacement_data.csv
+card_replacement_training_data.csv
+trump_choice_training_data.csv

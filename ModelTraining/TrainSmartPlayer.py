@@ -1,23 +1,23 @@
 import tensorflow as tf
 import pandas as pd
 import numpy as np
-import ast
-import sklearn.metrics as metrics
 from sklearn.model_selection import train_test_split
 from keras.models import Sequential
-from keras.layers import Dense, LSTM, Flatten, Dropout
+from keras.layers import Dense
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
 
 
 final_df = pd.read_csv('TrainingData/final_training_set.csv')
 
-feature_list = ['card1_suit','card1_rank','card2_suit',
-                'card2_rank','card3_suit','card3_rank',
-                'card4_suit','card4_rank','card5_suit',
-                'card5_rank','card_played_suit',
-                'card_played_rank','position','trump',
-                'leading_suit']
+feature_list = ['card1_suit', 'card1_rank',
+                'card2_suit', 'card2_rank',
+                'card3_suit', 'card3_rank',
+                'card4_suit', 'card4_rank',
+                'card5_suit', 'card5_rank',
+                'card_played_suit', 'card_played_rank',
+                'position', 'trump', 'leading_suit'
+                ]
 
 X_df = np.array(final_df[feature_list]).astype(np.float32)
 
@@ -30,7 +30,8 @@ X_df = np.array(final_df[feature_list]).astype(np.float32)
 # y_df = np.array(final_df['outcome']).astype(np.float32).reshape(-1,1)
 y_df = final_df['label']
 
-X_train, X_test, y_train, y_test = train_test_split(X_df, y_df, test_size = 0.2)
+X_train, X_test, y_train, y_test = train_test_split(X_df, y_df, test_size = 0.2, shuffle = True)
+X_validation, X_test, y_validation, y_test = train_test_split(X_test, y_test, test_size=0.5, shuffle=True)
 
 
 model = Sequential()
@@ -39,9 +40,9 @@ model.add(Dense(128))
 model.add(Dense(32, activation='softmax'))
 model.add(Dense(8))
 model.add(Dense(1, activation='tanh'))
-model.compile(loss='mean_squared_error', optimizer='sgd')
+model.compile(loss='mean_squared_error', optimizer='adam')
 
-model.fit(X_train, y_train, epochs=6, batch_size=512, verbose=1)
+model.fit(X_train, y_train, epochs=10, batch_size=512, verbose=1, validation_data=(X_validation, y_validation))
 
 pred_Y_test = model.predict(X_test)
 #also get the actual results so we can compare
