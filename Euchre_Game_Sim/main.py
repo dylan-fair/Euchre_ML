@@ -120,7 +120,7 @@ def game():
 
         # Update the display
         pygame.display.flip()
-
+        pygame.time.delay(10000)
         trump_pick_order = sorted(player_labels, key=lambda x: x.position)
         trump = 0
         player_trump = ''
@@ -162,7 +162,6 @@ def game():
             hand.append(players.getHand())
         all_cards = group_card_images(hand)
         draw_cards(screen, all_cards, player_labels, '', card_images, team_labels )
-
         for j in range(5):
             suit_played = ''
             hand_played = []
